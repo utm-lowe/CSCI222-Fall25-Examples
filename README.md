@@ -79,4 +79,5 @@ See the LICENSE file for full details.
 ---
 
 Happy coding!
+
 — Dr. Lowe
