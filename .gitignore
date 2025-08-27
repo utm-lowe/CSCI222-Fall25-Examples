@@ -1,3 +1,11 @@
+# executable names
+*
+!*.*
+!*/
+!Makefile
+!MAKEFILE
+!makefile
+
 # Prerequisites
 *.d
 
