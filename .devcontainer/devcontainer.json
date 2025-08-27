@@ -1,5 +1,4 @@
 {
-    "image": "mcr.microsoft.com/devcontainers/universal:2",
     "waitFor" : "onCreateCommand",
     "updateContentCommand": "sudo apt update && sudo apt install -y doxygen",
     "postCreateCommand": "", 
