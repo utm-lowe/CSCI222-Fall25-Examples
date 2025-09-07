@@ -11,9 +11,9 @@ int main()
     cin >> str;
 
     // print the characters in the word
-    for(int i=0; str[i]; i++) {
-        cout << str[i] << "  " 
-             << dec << (int)str[i] << "  0x"
-             << hex << (int)str[i] <<endl;
+    for(char *p=str; *p; p++) {
+        cout << *p << "  " 
+             << dec << (int)*p << "  0x"
+             << hex << (int)*p <<endl;
     }
 }
