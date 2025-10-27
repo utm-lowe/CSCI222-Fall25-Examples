@@ -13,6 +13,7 @@ LIB_OBJ=termplay/lib/keyboard.o \
 
 OBJ=src/wall.o\
 	src/paddle.o\
+	src/ball.o\
 
 all: $(TARGETS)
 game: src/main.o $(OBJ) $(LDLIBS)

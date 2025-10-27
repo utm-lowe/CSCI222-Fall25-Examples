@@ -1,4 +1,5 @@
 #include "paddle.h" 
+#include "wall.h"
 
 Paddle::Paddle(double x, double y) : MovingThing(x, y, 4, 1)
 {
@@ -29,5 +30,8 @@ void Paddle::handleKey(const std::string &key)
 
 void Paddle::handleCollision(Thing *other)
 {
-    resolveOverlap(other);
+    // handle collisions with walls
+    if(dynamic_cast<Wall*>(other) != nullptr) {
+        resolveOverlap(other);
+    }
 }
