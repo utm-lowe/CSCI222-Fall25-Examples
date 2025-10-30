@@ -12,7 +12,7 @@ void Ball::draw() const
 {
     setTextColor(getForeground());
     cursorPosition(getX(), getY());
-    std::cout << "o";
+    std::cout << "🏐";
     setTextColor(DEFAULT);
 }
 
