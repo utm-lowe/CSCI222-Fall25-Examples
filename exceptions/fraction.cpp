@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2025
  * 
  */
+#include <exception>
 #include "fraction.h"
 
 // Create a fraction with numerator=0 and denominator=1
@@ -59,6 +60,10 @@ void Fraction::numerator(int n)
 // Set the denominator
 void Fraction::denominator(int d)
 {
+    if(d == 0)
+    {
+        throw std::invalid_argument("Denominator cannot be zero");
+    }
     _d = d;
     reduce();
 }
