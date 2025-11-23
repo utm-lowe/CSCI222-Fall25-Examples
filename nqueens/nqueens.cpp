@@ -3,27 +3,32 @@
 using namespace std;
 
 // Struct is a class with everything public by default
-struct Candidate {
-    char **board;  // 2d array of the board
-    int n;         // how many queens have we placed?
-    int row;       // last row we tried to fill
-    int col;       // last col we tried to fill
+struct Candidate
+{
+    char **board; // 2d array of the board
+    int n;        // how many queens have we placed?
+    int row;      // last row we tried to fill
+    int col;      // last col we tried to fill
 
-    Candidate() {
+    Candidate()
+    {
         board = nullptr;
-        n=0; 
-        row=0;
-        col=0;
+        n = 0;
+        row = 0;
+        col = 0;
     }
 
-    Candidate(int n) {
+    Candidate(int n)
+    {
         this->n = n;
 
-        //allocate the board
-        board = new char*[n];
-        for(int i=0; i<n; i++) {
+        // allocate the board
+        board = new char *[n];
+        for (int i = 0; i < n; i++)
+        {
             board[i] = new char[n];
-            for(int j=0; j<n; j++) {
+            for (int j = 0; j < n; j++)
+            {
                 board[i][j] = ' ';
             }
         }
@@ -32,8 +37,10 @@ struct Candidate {
     Candidate(const Candidate &other) : Candidate(other.n)
     {
         // copy the grid from the other one
-        for(int i=0; i<n; i++) {
-            for(int j=0; j<n; j++) {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
                 board[i][j] = other.board[i][j];
             }
         }
@@ -41,21 +48,25 @@ struct Candidate {
         col = other.col;
     }
 
-    ~Candidate() {
-        for(int i=0; i<n; i++) {
-            delete [] board[i];
+    ~Candidate()
+    {
+        for (int i = 0; i < n; i++)
+        {
+            delete[] board[i];
         }
-        delete [] board;
+        delete[] board;
     }
 
-    Candidate& operator=(const Candidate &rhs) 
+    Candidate &operator=(const Candidate &rhs)
     {
         // deallocate our board
-        if(board != nullptr) {
-            for(int i=0; i<n; i++) {
-                delete [] board[i];
+        if (board != nullptr)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                delete[] board[i];
             }
-            delete [] board;
+            delete[] board;
         }
 
         // copy the copyable fileds
@@ -64,13 +75,15 @@ struct Candidate {
         col = rhs.col;
 
         // allocate a new board
-        board = new char*[n];
-        for(int i=0; i<n; i++) {
+        board = new char *[n];
+        for (int i = 0; i < n; i++)
+        {
             // allocate the row
             board[i] = new char[n];
 
             // copy the row
-            for(int j=0; j<n; j++) {
+            for (int j = 0; j < n; j++)
+            {
                 board[i][j] = rhs.board[i][j];
             }
         }
@@ -79,13 +92,18 @@ struct Candidate {
 };
 
 // output the candidate
-ostream& operator<<(ostream &os, const Candidate &c)
+ostream &operator<<(ostream &os, const Candidate &c)
 {
-    for(int i=0; i<c.n; i++) {
-        for(int j=0; j<c.n; j++) {
-            if(c.board[i][j] == ' ') {
+    for (int i = 0; i < c.n; i++)
+    {
+        for (int j = 0; j < c.n; j++)
+        {
+            if (c.board[i][j] == ' ')
+            {
                 os << '.';
-            } else {
+            }
+            else
+            {
                 os << c.board[i][j];
             }
         }
@@ -96,19 +114,23 @@ ostream& operator<<(ostream &os, const Candidate &c)
 }
 
 // generate an empty candidate for problem n
-Candidate root(int n) 
+Candidate root(int n)
 {
     return Candidate(n);
 }
 
 // generate the first candidate extension
-Candidate first(int n, Candidate &c) {
+Candidate first(int n, Candidate &c)
+{
     Candidate s(c);
 
     // find the first empty square
-    for(s.row=0; s.row < n; s.row++) {
-        for(s.col=0; s.col < n; s.col++) {
-            if(s.board[s.row][s.col] == ' ') {
+    for (s.row = 0; s.row < n; s.row++)
+    {
+        for (s.col = 0; s.col < n; s.col++)
+        {
+            if (s.board[s.row][s.col] == ' ')
+            {
                 // return once we hit an empty spot
                 s.board[s.row][s.col] = 'Q';
                 return s;
@@ -119,15 +141,18 @@ Candidate first(int n, Candidate &c) {
     return s;
 }
 
-
 // generate the next position
-Candidate next(int n, Candidate &c) {
+Candidate next(int n, Candidate &c)
+{
     Candidate s(c);
 
     // find the next empty square
-    for(s.row; s.row < n; s.row++) {
-        for(s.col; s.col < n; s.col++) {
-            if(s.board[s.row][s.col] == ' ') {
+    for (s.row; s.row < n; s.row++)
+    {
+        for (s.col; s.col < n; s.col++)
+        {
+            if (s.board[s.row][s.col] == ' ')
+            {
                 // remove the old queen
                 s.board[c.row][c.col] = ' ';
 
@@ -144,70 +169,81 @@ Candidate next(int n, Candidate &c) {
     return s;
 }
 
-// count queens in a diagonal
-int countDiagonal(int n, Candidate &c, int startRow, int startCol, int dRow, int dCol) 
-{
-    int count = 0;
-    int row = startRow;
-    int col = startCol;
-    while(row >= 0 && row < n && col >= 0 && col < n) {
-        if(c.board[row][col] == 'Q') {
-            count++;
-        }
-        row += dRow;
-        col += dCol;
-    }
-    return count;
-}
-
-
-bool reject(int n, Candidate &c) 
+bool reject(int n, Candidate &c)
 {
     // count the queens in each row and column
-    for(int i=0; i<n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         // count the row
         int count = 0;
-        for(int j=0; j<n; j++) {
-            if(c.board[i][j] == 'Q') {
+        for (int j = 0; j < n; j++)
+        {
+            if (c.board[i][j] == 'Q')
+            {
                 count++;
             }
         }
-        if(count >= 2) return true;
+        if (count >= 2)
+            return true;
 
         // count columns
         count = 0;
-        for(int j=0; j<n; j++) {
-            if(c.board[j][i] == 'Q') {
+        for (int j = 0; j < n; j++)
+        {
+            if (c.board[j][i] == 'Q')
+            {
                 count++;
             }
         }
-        if(count >= 2) return true;
+        if (count >= 2)
+            return true;
     }
 
     // check diagonals
-    // there are 2n-1 diagonals in each direction
-    for(int d=-(n-1); d<=(n-1); d++)
+    // TL to BR diagonals: i + j = s
+    for (int d = -(n - 1); d <= (n - 1); d++)
     {
-        // "\" diagonals
-        int count = countDiagonal(n, c, max(0, d), max(0, -d), 1, 1);
-        if(count >= 2) return true;
+        int count = 0;
 
-        // "/" diagonals
-        count = countDiagonal(n, c, min(n-1, n-1 + d), max(0, -d), -1, 1);
-        if(count >= 2) return true;
+        for (int i = 0; i < n; i++)
+        {
+            int j = i + d;
+            if (j >= 0 && j < n && c.board[i][j] == 'Q')
+            {
+                if (++count >= 2)
+                    return true;
+            }
+        }
+    }
+
+    // TR to BL diagonals: i + j = s
+    for (int s = 0; s <= 2 * (n - 1); s++)
+    {
+        int count = 0;
+        for (int i = 0; i < n; i++)
+        {
+            int j = s - i;
+            if (j >= 0 && j < n && c.board[i][j] == 'Q')
+            {
+                if (++count >= 2)
+                    return true;
+            }
+        }
     }
 
     return false;
 }
 
-
-bool accept(int n, Candidate &c) 
+bool accept(int n, Candidate &c)
 {
     // we accept if we have placed n queens
     int count = 0;
-    for(int i=0; i<n; i++) {
-        for(int j=0; j<n; j++) {
-            if(c.board[i][j] == 'Q') {
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (c.board[i][j] == 'Q')
+            {
                 count++;
             }
         }
@@ -216,23 +252,28 @@ bool accept(int n, Candidate &c)
 }
 
 // run the n-queens backtrack
-Candidate backtrack(int n, Candidate &c) {
-    if(reject(n, c)) {
+Candidate backtrack(int n, Candidate &c)
+{
+    if (reject(n, c))
+    {
         // return a non-solution
         Candidate s(c);
         s.row = s.col = n;
         return s;
     }
 
-    if(accept(n, c)) {
+    if (accept(n, c))
+    {
         // we've solved it!
         return c;
     }
 
     Candidate s = first(n, c);
-    while(s.row < n) { // our version of "NULL"
+    while (s.row < n)
+    { // our version of "NULL"
         Candidate s2 = backtrack(n, s);
-        if(s2.row<n) {
+        if (s2.row < n)
+        {
             // double check that we need to continue
             return s2;
         }
@@ -242,7 +283,6 @@ Candidate backtrack(int n, Candidate &c) {
     // return the failed solution
     return s;
 }
-
 
 int main()
 {
@@ -259,9 +299,12 @@ int main()
     Candidate s = backtrack(n, c);
 
     // print the result
-    if(s.row >= n) {
+    if (s.row >= n)
+    {
         cout << "Impossible" << endl;
-    } else {
+    }
+    else
+    {
         cout << s << endl;
     }
 }
